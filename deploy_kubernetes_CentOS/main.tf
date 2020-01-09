@@ -31,17 +31,17 @@ data "vsphere_virtual_machine" "template" {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
-data "vsphere_resource_pool" "resource_pool" {
-  name          = var.vsphere_vm_resource_pool
-  datacenter_id = data.vsphere_datacenter.dc.id
-}
+# data "vsphere_resource_pool" "resource_pool" {
+#   name          = var.vsphere_vm_resource_pool
+#   datacenter_id = data.vsphere_datacenter.dc.id
+# }
 
-data "vsphere_tag_category" "category" {
-  name = var.vsphere_tag_category
-}
+# data "vsphere_tag_category" "category" {
+#   name = var.vsphere_tag_category
+# }
 
-data "vsphere_tag" "tag" {
-  name        = var.vsphere_tag_name
-  category_id = data.vsphere_tag_category.category.id
-}
+# data "vsphere_tag" "tag" {
+#   name        = var.vsphere_tag_name
+#   category_id = data.vsphere_tag_category.category.id
+# }
 

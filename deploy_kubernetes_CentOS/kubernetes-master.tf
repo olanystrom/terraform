@@ -6,10 +6,9 @@
 resource "vsphere_virtual_machine" "TPM03-K8-MASTER" {
   # VM placement #
   name             = var.vsphere_vm_name
-  resource_pool_id = data.vsphere_resource_pool.resource_pool.id
+  resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
   folder           = var.vsphere_vm_folder
-  tags             = [data.vsphere_tag.tag.id]
 
   # VM resources #
   num_cpus = var.vsphere_vcpu_number
@@ -22,8 +21,8 @@ resource "vsphere_virtual_machine" "TPM03-K8-MASTER" {
   disk {
     label            = "${var.vsphere_vm_name}.vmdk"
     size             = data.vsphere_virtual_machine.template.disks[0].size
-    thin_provisioned = data.vsphere_virtual_machine.template.disks[0].thin_provisioned
-    eagerly_scrub    = data.vsphere_virtual_machine.template.disks[0].eagerly_scrub
+    thin_provisioned = true
+    # eagerly_scrub    = data.vsphere_virtual_machine.template.disks[0].eagerly_scrub
   }
 
   # VM networking #
@@ -144,23 +143,6 @@ resource "vsphere_virtual_machine" "TPM03-K8-MASTER" {
       "chmod +x /tmp/configure_phase3.sh",
       "/tmp/configure_phase3.sh",
     ]
-    connection {
-      host     = self.default_ip_address
-      type     = "ssh"
-      user     = "root"
-      password = var.vsphere_vm_password
-    }
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "cat << EOF > /etc/hosts",
-      "${var.vsphere_ipv4_address} ${var.vsphere_vm_name}",
-      "${var.vsphere_ipv4_address_k8n1_network}${var.vsphere_ipv4_address_k8n1_host + 0} ${var.vsphere_vm_name_k8n1}${count.index + 1}",
-      "${var.vsphere_ipv4_address_k8n1_network}${var.vsphere_ipv4_address_k8n1_host + 1} ${var.vsphere_vm_name_k8n1}${count.index + 2}",
-      "${var.vsphere_ipv4_address_k8n1_network}${var.vsphere_ipv4_address_k8n1_host + 2} ${var.vsphere_vm_name_k8n1}${count.index + 3}",
-      "EOF",
-    ]
-
     connection {
       host     = self.default_ip_address
       type     = "ssh"

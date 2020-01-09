@@ -32,9 +32,9 @@ variable "vsphere_vm_folder" {
   description = "In which folder the VM will be store"
 }
 
-variable "vsphere_vm_resource_pool" {
-  description = "Choose your Resource Pool to use as a folder"
-}
+# variable "vsphere_vm_resource_pool" {
+#   description = "Choose your Resource Pool to use as a folder"
+# }
 
 variable "vsphere_cluster" {
   description = "In which cluster the VM will be deployed"
@@ -110,13 +110,13 @@ variable "vsphere_ipv4_address_k8n1_host" {
   description = "K8 Node 1 IP"
 }
 
-variable "vsphere_tag_category" {
-  description = "vSphere Tag Catagory Details"
-}
+# variable "vsphere_tag_category" {
+#   description = "vSphere Tag Catagory Details"
+# }
 
-variable "vsphere_tag_name" {
-  description = "vSphere Tag Details"
-}
+# variable "vsphere_tag_name" {
+#   description = "vSphere Tag Details"
+# }
 
 variable "vsphere_k8_version" {
   description = "Kubernetes Version to Install"

@@ -3,17 +3,16 @@
 #===============================================================================
 
 # Create a vSphere VM in the folder #
-resource "vsphere_virtual_machine" "TPM03-K8-NODE" {
+resource "vsphere_virtual_machine" "kube2-node" {
   # Node Count #
 
   count = var.vsphere_k8_nodes
 
   # VM placement #
-  name             = "${var.vsphere_vm_name_k8n1}${count.index + 1}"
-  resource_pool_id = data.vsphere_resource_pool.resource_pool.id
+  name             = join("", [var.vsphere_vm_name_k8n1, count.index + 1])
+  resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
   folder           = var.vsphere_vm_folder
-  tags             = [data.vsphere_tag.tag.id]
 
   #depends_on = ["vsphere_virtual_machine.TPM03-K8-MASTER"]
 
@@ -26,10 +25,10 @@ resource "vsphere_virtual_machine" "TPM03-K8-NODE" {
 
   # VM storage #
   disk {
-    label            = "${var.vsphere_vm_name}.vmdk"
+    label            = join("", [var.vsphere_vm_name, ".vmdk"])
     size             = data.vsphere_virtual_machine.template.disks[0].size
-    thin_provisioned = data.vsphere_virtual_machine.template.disks[0].thin_provisioned
-    eagerly_scrub    = data.vsphere_virtual_machine.template.disks[0].eagerly_scrub
+    thin_provisioned = true
+    # eagerly_scrub    = data.vsphere_virtual_machine.template.disks[0].eagerly_scrub
   }
 
   # VM networking #
@@ -50,7 +49,7 @@ resource "vsphere_virtual_machine" "TPM03-K8-NODE" {
       }
 
       network_interface {
-        ipv4_address = "${var.vsphere_ipv4_address_k8n1_network}${var.vsphere_ipv4_address_k8n1_host + count.index}"
+        ipv4_address = join("", [var.vsphere_ipv4_address_k8n1_network, var.vsphere_ipv4_address_k8n1_host + count.index])
         ipv4_netmask = var.vsphere_ipv4_netmask
       }
 
@@ -112,23 +111,6 @@ resource "vsphere_virtual_machine" "TPM03-K8-NODE" {
       "chmod +x /tmp/configurek8node_phase2.sh",
       "/tmp/configurek8node_phase2.sh",
     ]
-    connection {
-      host     = self.default_ip_address
-      type     = "ssh"
-      user     = "root"
-      password = var.vsphere_vm_password
-    }
-  }
-  provisioner "remote-exec" {
-    inline = [
-      "cat << EOF > /etc/hosts",
-      "${var.vsphere_ipv4_address} ${var.vsphere_vm_name}",
-      "${var.vsphere_ipv4_address_k8n1_network}${var.vsphere_ipv4_address_k8n1_host + 0} ${var.vsphere_vm_name_k8n1}${count.index + 1}",
-      "${var.vsphere_ipv4_address_k8n1_network}${var.vsphere_ipv4_address_k8n1_host + 1} ${var.vsphere_vm_name_k8n1}${count.index + 2}",
-      "${var.vsphere_ipv4_address_k8n1_network}${var.vsphere_ipv4_address_k8n1_host + 2} ${var.vsphere_vm_name_k8n1}${count.index + 3}",
-      "EOF",
-    ]
-
     connection {
       host     = self.default_ip_address
       type     = "ssh"
