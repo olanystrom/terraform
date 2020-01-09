@@ -70,7 +70,6 @@ variable "vsphere_ipv4_netmask" {
 
 variable "vsphere_k8pod_network" {
   description = "POD Network and Subnet Mask for K8 Configruation Script"
-  
 }
 
 variable "vsphere_ipv4_gateway" {
@@ -92,7 +91,7 @@ variable "vsphere_time_zone" {
 }
 
 variable "vsphere_vm_password" {
-  description ="Root password for the CentOS Teamplte"
+  description = "Root password for the CentOS Teamplte"
 }
 
 variable "vsphere_k8_nodes" {
@@ -102,6 +101,7 @@ variable "vsphere_k8_nodes" {
 variable "vsphere_vm_name_k8n1" {
   description = "K8 Node VM Name"
 }
+
 variable "vsphere_ipv4_address_k8n1_network" {
   description = "K8 Node 1 IP"
 }
@@ -109,13 +109,17 @@ variable "vsphere_ipv4_address_k8n1_network" {
 variable "vsphere_ipv4_address_k8n1_host" {
   description = "K8 Node 1 IP"
 }
+
 variable "vsphere_tag_category" {
   description = "vSphere Tag Catagory Details"
 }
+
 variable "vsphere_tag_name" {
   description = "vSphere Tag Details"
 }
+
 variable "vsphere_k8_version" {
-  description ="Kubernetes Version to Install"
+  description = "Kubernetes Version to Install"
   default     = "1.15.3"
 }
+
