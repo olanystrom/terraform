@@ -20,9 +20,9 @@ resource "vsphere_virtual_machine" "TPM03-K8-MASTER" {
   # VM storage #
   disk {
     label            = "${var.vsphere_vm_name}.vmdk"
-    size             = data.vsphere_virtual_machine.template.disks[0].size
-    thin_provisioned = true
-    # eagerly_scrub    = data.vsphere_virtual_machine.template.disks[0].eagerly_scrub
+    size             = data.vsphere_virtual_machine.template.disks.0.size
+    thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned
+    eagerly_scrub    = data.vsphere_virtual_machine.template.disks.0.eagerly_scrub
   }
 
   # VM networking #
