@@ -96,6 +96,17 @@ resource "vsphere_virtual_machine" "kube2-node" {
     }
   }
   provisioner "file" {
+    source      = "docker-deamon.json"
+    destination = "/etc/docker/daemon.json"
+
+    connection {
+      host     = self.default_ip_address
+      type     = "ssh"
+      user     = "root"
+      password = var.vsphere_vm_password
+    }
+  }
+  provisioner "file" {
     source      = "configurek8node_phase2.sh"
     destination = "/tmp/configurek8node_phase2.sh"
 

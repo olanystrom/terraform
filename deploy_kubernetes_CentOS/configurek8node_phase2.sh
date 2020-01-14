@@ -2,7 +2,7 @@
 
 systemctl enable --now kubelet
 
-yum install -y docker
+yum install -y docker nfs-utils
 
 systemctl enable docker && systemctl start docker
  
